@@ -7,6 +7,7 @@ public class Player : MonoBehaviour
     public Rigidbody2D rb;
     public Vector2 jumpForce = new Vector2 (0f, 500f);
     bool taNoChao;
+    [SerializeField]float velocidade = 50f;
 
 
     void Start()
@@ -21,7 +22,11 @@ public class Player : MonoBehaviour
         {
             rb.AddForce(jumpForce);
         }
+    }
 
+    private void FixedUpdate()
+    {
+        transform.Translate(new Vector2(Input.GetAxisRaw("Horizontal"), 0) * velocidade);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -33,7 +38,7 @@ public class Player : MonoBehaviour
 
         if (collision.gameObject.GetComponent<Obstaculo>())
         {
-            Destroy(this.gameObject);
+            Morreu();
         }
 
     }
@@ -44,5 +49,20 @@ public class Player : MonoBehaviour
         {
             taNoChao = false;
         }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.GetComponent<Obstaculo>())
+        {
+            Morreu();
+        }
+    }
+
+    void Morreu()
+    {
+        Time.timeScale = 0;
+        UI.instance.TurnOnReplayMenu();
+        Destroy(this.gameObject);
     }
 }
