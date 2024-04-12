@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObstaculoSpawner : MonoBehaviour
+public class ObjectsSpawner : MonoBehaviour
 {
     public GameObject obstaculo;
     //tempo que o timer precisa atingir

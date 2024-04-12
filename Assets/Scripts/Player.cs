@@ -8,11 +8,11 @@ public class Player : MonoBehaviour
     public Vector2 jumpForce = new Vector2 (0f, 500f);
     bool taNoChao;
     [SerializeField]float velocidade = 50f;
-
+    AudioSource audioSource;
 
     void Start()
     {
-
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -20,6 +20,7 @@ public class Player : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space) && taNoChao)
         {
+            audioSource.Play();
             rb.AddForce(jumpForce);
         }
     }
@@ -57,12 +58,24 @@ public class Player : MonoBehaviour
         {
             Morreu();
         }
+
+        if (collision.gameObject.GetComponent<Moeda>())
+        {
+            ColetaMoeda(1, collision);
+        }
     }
 
     void Morreu()
     {
+        GameManager.instance.PlayerTaVivo = false;
         Time.timeScale = 0;
         UI.instance.TurnOnReplayMenu();
         Destroy(this.gameObject);
+    }
+
+    void ColetaMoeda(int quantidade, Collider2D collision)
+    {
+        GameManager.instance.moedas += quantidade;
+        Destroy(collision.gameObject);
     }
 }
